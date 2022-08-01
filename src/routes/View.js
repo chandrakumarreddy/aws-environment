@@ -1,15 +1,16 @@
 import { CloseOutlined } from "@mui/icons-material";
 import { AppBar, Box, Button, Paper, Typography } from "@mui/material";
 import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import EditEnvironment from "../main/EditEnvironment";
 import Header from "../main/Header";
-import useEnvironmentsStore from "../store/environments";
+import { setEdit } from "../store/env";
 
 const Content = (props) => {
   const { environment } = props;
-  const edit = useEnvironmentsStore((store) => store.edit);
-  const setEdit = useEnvironmentsStore((store) => [store.setEdit]);
+  const edit = useSelector((store) => store.envs.edit);
+  const dispatch = useDispatch();
   return (
     <Paper
       sx={{
@@ -39,7 +40,7 @@ const Content = (props) => {
             size="small"
             type="button"
             onClick={() => {
-              setEdit(!edit);
+              dispatch(setEdit(!edit));
             }}
           >
             {edit ? <CloseOutlined /> : "EDIT"}
@@ -56,17 +57,15 @@ const Content = (props) => {
 export default function View() {
   const params = useParams();
   const navigate = useNavigate();
-  const [environmentsData, setEdit] = useEnvironmentsStore((store) => [
-    store.environmentsData,
-    store.setEdit,
-  ]);
+  const dispatch = useDispatch();
+  const environmentsData = useSelector((store) => store.envs.environmentsData);
   const environment = environmentsData[params.id];
   useEffect(() => {
     if (!environment) {
       return navigate("/", { replace: true });
     }
     return () => {
-      setEdit(false);
+      dispatch(setEdit(false));
     };
   }, [environment]);
   return (

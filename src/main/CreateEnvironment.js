@@ -4,14 +4,13 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { useState } from "react";
-import useEnvironmentsStore from "../store/environments";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setEnvironmentsData } from "../store/env";
 
 export default function CreateEnvironment() {
   const navigate = useNavigate();
-  const setEnvironmentsData = useEnvironmentsStore(
-    (store) => store.setEnvironmentsData
-  );
+  const dispatch = useDispatch();
   const [data, setData] = useState({});
   const handleChange = (e) => {
     const name = e.target.name;
@@ -20,7 +19,7 @@ export default function CreateEnvironment() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    setEnvironmentsData(data.name, data);
+    dispatch(setEnvironmentsData({ name: data.name, data }));
     navigate("/", { replace: true });
   };
   return (

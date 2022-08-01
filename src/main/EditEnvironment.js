@@ -4,8 +4,14 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
-import useEnvironmentsStore from "../store/environments";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteItem,
+  setEdit,
+  setEnvironmentsData,
+  updateEnvironment,
+} from "../store/env";
 
 const initialData = {
   name: "",
@@ -20,15 +26,8 @@ export default function EditEnvironment(props) {
   const { environment } = props;
   const { id } = useParams();
   const navigate = useNavigate();
-  const [setEnvironmentsData, deleteItem, setEdit, updateEnvironment] =
-    useEnvironmentsStore((store) => [
-      store.setEnvironmentsData,
-      store.deleteItem,
-      store.setEdit,
-      store.updateEnvironment,
-      store.setReset,
-    ]);
-  const edit = useEnvironmentsStore((store) => store.edit);
+  const dispatch = useDispatch();
+  const edit = useSelector((store) => store.envs.edit);
   const [data, setData] = useState(() => initialData);
   useEffect(() => {
     setData(environment);
@@ -41,7 +40,7 @@ export default function EditEnvironment(props) {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    setEnvironmentsData(data.name, data);
+    dispatch(setEnvironmentsData({ name: data.name, data }));
     navigate("/", { replace: true });
   };
   return (
@@ -151,7 +150,7 @@ export default function EditEnvironment(props) {
           sx={{ fontWeight: "bold", borderRadius: 0, marginRight: "16px" }}
           onClick={() => {
             if (edit) {
-              deleteItem(data.id);
+              dispatch(deleteItem({ id: data.id }));
               navigate("/", { replace: true });
             }
           }}
@@ -166,8 +165,8 @@ export default function EditEnvironment(props) {
           sx={{ fontWeight: "bold", borderRadius: 0 }}
           onClick={() => {
             if (edit) {
-              setEdit(false);
-              updateEnvironment(+id, data);
+              dispatch(setEdit(false));
+              dispatch(updateEnvironment({ id: +id, data }));
             }
           }}
         >

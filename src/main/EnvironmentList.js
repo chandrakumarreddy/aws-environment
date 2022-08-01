@@ -7,9 +7,9 @@ import ListItemButton from "@mui/material/ListItemButton";
 
 import ListItemText from "@mui/material/ListItemText";
 import DnsRoundedIcon from "@mui/icons-material/DnsRounded";
-import useEnvironmentsStore from "../store/environments";
 import { Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const drawerWidth = 256;
 
@@ -30,7 +30,7 @@ const itemCategory = {
 
 export default function EnvironmentList() {
   const navigate = useNavigate();
-  const environments = useEnvironmentsStore((store) => store.environmentsList);
+  const environments = useSelector((store) => store.envs.environmentsList);
   return (
     <Drawer
       variant="permanent"

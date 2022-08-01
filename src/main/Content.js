@@ -3,9 +3,9 @@ import AppBar from "@mui/material/AppBar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import CreateEnvironment from "./CreateEnvironment.js";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 
-export default function Content(props) {
+export default function Content() {
   return (
     <Paper
       sx={{
