@@ -2,7 +2,8 @@ import { CloseOutlined } from "@mui/icons-material";
 import { AppBar, Box, Button, Paper, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+
+import useFetchEnvironmentData from "../hooks/useFetchEnvironmentData";
 import EditEnvironment from "../main/EditEnvironment";
 import Header from "../main/Header";
 import { setEdit } from "../store/env";
@@ -55,15 +56,9 @@ const Content = (props) => {
 };
 
 export default function View() {
-  const params = useParams();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const environmentsData = useSelector((store) => store.envs.environmentsData);
-  const environment = environmentsData[params.id];
+  const environment = useFetchEnvironmentData();
   useEffect(() => {
-    if (!environment) {
-      return navigate("/", { replace: true });
-    }
     return () => {
       dispatch(setEdit(false));
     };

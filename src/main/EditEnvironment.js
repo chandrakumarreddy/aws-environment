@@ -167,6 +167,8 @@ export default function EditEnvironment(props) {
             if (edit) {
               dispatch(setEdit(false));
               dispatch(updateEnvironment({ id: +id, data }));
+            } else {
+              navigate("subscriptions");
             }
           }}
         >
