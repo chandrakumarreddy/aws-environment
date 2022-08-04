@@ -1,6 +1,6 @@
-import { Button, Typography } from "@mui/material";
+import { Button, Checkbox, Menu, MenuItem, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,15 +9,15 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import useFetchEnvironmentData from "../hooks/useFetchEnvironmentData";
-import { Add } from "@mui/icons-material";
+import { Add, Delete, Edit, PersonPinCircle } from "@mui/icons-material";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs };
+function createData(name, subscribe, publishes, version) {
+  return { name, subscribe, publishes, version };
 }
 
 const rows = [
-  createData("Greg", "", "listing|web", 1),
-  createData("env copy avc", "contact|lead", "", 1),
+  createData("Greg", "", "listing | web", 1),
+  createData("env copy avc", "contact | lead", "", 1),
 ];
 
 export default function Subscriptions() {
@@ -54,18 +54,7 @@ export default function Subscriptions() {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <TableRow
-                key={row.name}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell>{row.calories}</TableCell>
-                <TableCell>{row.fat}</TableCell>
-                <TableCell>{row.carbs}</TableCell>
-                <TableCell>{row.protein}</TableCell>
-              </TableRow>
+              <Item item={row} key={row.name} />
             ))}
           </TableBody>
         </Table>
@@ -73,3 +62,103 @@ export default function Subscriptions() {
     </Box>
   );
 }
+
+const list = [
+  "award",
+  "contact",
+  "lead",
+  "listing",
+  "marketing",
+  "profile",
+  "servicearea",
+  "website",
+  "franchise",
+];
+
+const Item = ({ item }) => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  return (
+    <TableRow
+      sx={{
+        "&:last-child td, &:last-child th": { border: 0 },
+        ":hover": { backgroundColor: "lightblue" },
+      }}
+    >
+      <TableCell component="th" scope="row">
+        {item.name}
+      </TableCell>
+      <TableCell display="flex">
+        <Box display="flex">
+          <span>{item.subscribe}</span>
+          {item.subscribe && (
+            <Box display="flex">
+              <Button
+                onClick={handleClick}
+                id="edit-subscription"
+                sx={{ padding: 0, margin: 0, minWidth: "24px", width: "24px" }}
+              >
+                <Edit
+                  fontSize="8px"
+                  sx={{ marginLeft: "4px", cursor: "pointer" }}
+                />
+              </Button>
+              <Menu
+                open={open}
+                onClose={handleClose}
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                sx={{ borderRadius: 0 }}
+              >
+                {list.map((item) => (
+                  <MenuItem
+                    key={item}
+                    sx={{
+                      padding: "0 8px",
+                      fontSize: "12px",
+                      width: "fit-content",
+                    }}
+                  >
+                    <Checkbox
+                      size="8px"
+                      aria-label={item}
+                      sx={{ padding: 0, marginRight: "8px" }}
+                    >
+                      {item}
+                    </Checkbox>
+                    <span>{item}</span>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          )}
+        </Box>
+      </TableCell>
+      <TableCell>{item.publishes}</TableCell>
+      <TableCell>
+        <span>{item.version}</span>
+        <Button
+          onClick={() => {}}
+          padding="0"
+          margin="0"
+          width="24px"
+          minWidth="24px"
+        >
+          <Delete
+            fontSize="8px"
+            sx={{ marginLeft: "4px", cursor: "pointer" }}
+          />
+        </Button>
+      </TableCell>
+    </TableRow>
+  );
+};
